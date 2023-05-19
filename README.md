@@ -24,3 +24,12 @@ helm install -f values.yaml \
      --set service.targetPort=9000 \
      step-certificates smallstep/step-certificates
 ```
+```
+helm install -n platform -f values.yaml \
+     --set inject.secrets.ca_password=$(cat password.txt) \
+     --set inject.secrets.provisioner_password=$(cat password.txt) \
+     --set service.type=NodePort \
+     --set service.nodePort=31000  \
+     --set service.targetPort=9000 \
+     step-certificates smallstep/step-certificates
+```
