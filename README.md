@@ -1,11 +1,16 @@
 # step-ca
-Own Certificate Authority Follow the steps
+Own Certificate Authority 
+**Helm Chart:**
+```
 https://artifacthub.io/packages/helm/smallstep/step-certificates
-
+```
+**Package Installation:**
+```
+https://smallstep.com/docs/step-cli/installation/#linux-packages-amd64
+```
 # Install Step CA
 ```
-1.https://smallstep.com/docs/step-cli/installation/#linux-packages-amd64
-2.step ca init --helm > values.yaml
+step ca init --helm > values.yaml
 Provisoner Name: acme/development
 DNS: serviceName/ Own DNS
 TYPE:ACME Note: Need to chane in Values.yaml
