@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: step-certificates-000
+spec:
+  type: NodePort
+  #type: LoadBalancer
+  selector:
+    statefulset.kubernetes.io/pod-name: step-certificates-0
+  ports:
+  - protocol: TCP
+    port: 443
+    targetPort: 9000
