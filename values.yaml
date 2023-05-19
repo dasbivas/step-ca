@@ -1,0 +1,107 @@
+# Helm template
+inject:
+  enabled: true
+  # Config contains the configuration files ca.json and defaults.json
+  config:
+    files:
+      ca.json:
+        root: /home/step/certs/root_ca.crt
+        federateRoots: []
+        crt: /home/step/certs/intermediate_ca.crt
+        key: /home/step/secrets/intermediate_ca_key
+        address: :9000
+        dnsNames:
+          - step-certificates.default.svc.cluster.local
+        logger:
+          format: json
+        db:
+          type: badgerv2
+          dataSource: /home/step/db
+        authority:
+          enableAdmin: false
+          provisioners:
+            - {"type":"ACME","name":"development","key":{"use":"sig","kty":"EC","kid":"DXIrSeoQRXlLTeWHHgRQsbZtfZIr5JXydPmWkINEHdc","crv":"P-256","alg":"ES256","x":"LxikFIuMd1Zpk_hzDnFyMtgq8OAuZs34_Kecpz_O1lI","y":"MOVRJTQ8trv-c3dO4TBI_dXY55lBsa7fWYkUIFInwCk"},"encryptedKey":"eyJhbGciOiJQQkVTMi1IUzI1NitBMTI4S1ciLCJjdHkiOiJqd2sranNvbiIsImVuYyI6IkEyNTZHQ00iLCJwMmMiOjEwMDAwMCwicDJzIjoiSVpfbFkxeUU3bzE1S2R0MHZ3WVYxdyJ9.j0Yj_kN4et1iv1IZgydhl9bVqJISK42LTtdMTIY-Yy-RyWf0JRMXIw.zr-2Oe_kxo-qe6jZ.n4fZr_QCdQz9I558xQ6iEzmV20v0cvLkA0uWNYStY-RFtSlsovJ5Mkc3BbXs9Voikdc7etA99HR5fQeC1G7voFikFC-KWbLhxx1jC1Pdi0zvGqb1tB3zVBgUlaphxmgABQxyUMe5COV3LyRk0lj7jHyj81368_E1WdV5d0zPItUdsmMwprFHyVYEzXVzPLylt7W-h8A3eXPvYJEMllMaBskYwdzBz-uBnFGLSwlt1kCjqPOOYPLAwPhrUuOVvjsAfJb7zS4_bIpPeW1vTn0ej-eFOIxzmX_T-0OgeweGZcaazc6gbTxk6wKYLzKff-CFTj9RtZc2anGgoxVw2vM.79wLzquhzg1c1LY3qpb_bg","options":{"x509":{},"ssh":{}}}
+        tls:
+          cipherSuites:
+            - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+            - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          minVersion: 1.2
+          maxVersion: 1.3
+          renegotiation: false
+
+      defaults.json:
+        ca-url: https://step-certificates.default.svc.cluster.local
+        ca-config: /home/step/config/ca.json
+        fingerprint: 135e1cc4a475babad925f4bd09c964c32f0f9beaf44fad936e5988193a1f7186
+        root: /home/step/certs/root_ca.crt
+
+  # Certificates contains the root and intermediate certificate and
+  # optionally the SSH host and user public keys
+  certificates:
+    # intermediate_ca contains the text of the intermediate CA Certificate
+    intermediate_ca: |
+      -----BEGIN CERTIFICATE-----
+      MIIB4DCCAYagAwIBAgIQV0rfuemg/0tE2lH1bBNt4jAKBggqhkjOPQQDAjA6MRcw
+      FQYDVQQKEw5GYWtlIEF1dGhvcml0eTEfMB0GA1UEAxMWRmFrZSBBdXRob3JpdHkg
+      Um9vdCBDQTAeFw0yMzA1MTkwNTI3NTlaFw0zMzA1MTYwNTI3NTlaMEIxFzAVBgNV
+      BAoTDkZha2UgQXV0aG9yaXR5MScwJQYDVQQDEx5GYWtlIEF1dGhvcml0eSBJbnRl
+      cm1lZGlhdGUgQ0EwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS4NMtR2dmjTwAK
+      2bFwURPbL8+vho4kUmkckmGCBixMSA96vtH0Rd4kJGf05b34OWL+CZuQgHjRRmRn
+      A78KF/3qo2YwZDAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB/wIBADAd
+      BgNVHQ4EFgQU3Ob5y072MhGONW4WEInQR38TtwswHwYDVR0jBBgwFoAUt9Kjc5t2
+      nt4jOgI8jFVlsAI+r7kwCgYIKoZIzj0EAwIDSAAwRQIhAPAxW6ONKRO7WGAlhV9j
+      YkLgLD94ksRQyLDhjveX0dZ6AiAZG1fpAzieOwmiYZswnFb4XFz+n7a/qvXmYguY
+      LMYx4w==
+      -----END CERTIFICATE-----
+
+
+    # root_ca contains the text of the root CA Certificate
+    root_ca: |
+      -----BEGIN CERTIFICATE-----
+      MIIBuTCCAV6gAwIBAgIRAMqeAamOzI+LHJUPUpr0xO0wCgYIKoZIzj0EAwIwOjEX
+      MBUGA1UEChMORmFrZSBBdXRob3JpdHkxHzAdBgNVBAMTFkZha2UgQXV0aG9yaXR5
+      IFJvb3QgQ0EwHhcNMjMwNTE5MDUyNzU4WhcNMzMwNTE2MDUyNzU4WjA6MRcwFQYD
+      VQQKEw5GYWtlIEF1dGhvcml0eTEfMB0GA1UEAxMWRmFrZSBBdXRob3JpdHkgUm9v
+      dCBDQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABAG+ODzSwxQXlvBN0AIx0Vyp
+      9MSHK7ibl/s0l72qp5XUnIK/RtZzxYNHSqNvbadwWqsp+pdfBzrAunSkm1Jked6j
+      RTBDMA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEBMB0GA1UdDgQW
+      BBS30qNzm3ae3iM6AjyMVWWwAj6vuTAKBggqhkjOPQQDAgNJADBGAiEA79rOAxhh
+      wZ560rOAZEhfxji9Lyf+uog2UwB2z53GGjgCIQD2VqnPyUy6cXuxgVfN4BeVgVDZ
+      O96nVWtlKDP8UXwvGw==
+      -----END CERTIFICATE-----
+
+
+  # Secrets contains the root and intermediate keys and optionally the SSH
+  # private keys
+  secrets:
+    # ca_password contains the password used to encrypt x509.intermediate_ca_key, ssh.host_ca_key and ssh.user_ca_key
+    # This value must be base64 encoded.
+    ca_password:
+    provisioner_password:
+
+    x509:
+      # intermediate_ca_key contains the contents of your encrypted intermediate CA key
+      intermediate_ca_key: |
+        -----BEGIN EC PRIVATE KEY-----
+        Proc-Type: 4,ENCRYPTED
+        DEK-Info: AES-256-CBC,2a231a5c572dd5a47a0f8ab687749cfe
+
+        ffLkQmGYojiRAVbuyYd1FDnJOzo8aIFPG3UlN/KVPihcjJxfo89zQbIKrrQ+VoNV
+        g+kaAsFqk0OQn/MATCixyZjQqPdvqjLpNL/Oh8OIJP4+uZQ+ManZhtvI/ly6SpZi
+        ApCuga0mWpNGwc94bvhWnQLvhT1ABXauJAVramsbte8=
+        -----END EC PRIVATE KEY-----
+
+
+      # root_ca_key contains the contents of your encrypted root CA key
+      # Note that this value can be omitted without impacting the functionality of step-certificates
+      # If supplied, this should be encrypted using a unique password that is not used for encrypting
+      # the intermediate_ca_key, ssh.host_ca_key or ssh.user_ca_key.
+      root_ca_key: |
+        -----BEGIN EC PRIVATE KEY-----
+        Proc-Type: 4,ENCRYPTED
+        DEK-Info: AES-256-CBC,f89d3e82bfece3f66bd9d21ad66b4ac5
+
+        DPYCC7gfjXJeYvS1D2e8y7RwplJ4N5Hpveuznp5gi1ZOh2xCjH8rW4Vpeo/Vu8yS
+        CEslEyiqAA5JMPhM2YSZSAAtlpfo0m0HCC9vnJlNS9e74K1w04Nn4P0N7vSImH2s
+        l7wVqyIixiwOxJwZxt6jfzIWYIlUKgwBcS6vOvB7XRw=
+        -----END EC PRIVATE KEY-----
